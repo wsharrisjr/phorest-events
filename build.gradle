@@ -1,0 +1,83 @@
+buildscript {
+  ext {
+    def archivaUrl = "https://archiva.phorest.com"
+    mavenRepoReleaseUrl = "$archivaUrl/repository/internal"
+    mavenRepoSnapshotUrl = "$archivaUrl/repository/snapshots"
+    mavenRepoDeployUsername = "phorest-user"
+    mavenRepoDeployPassword = "5kFmNjiGkUvxV1E9CJPWUF9h"
+
+    jacksonVersion = '2.7.4'
+    jacocoVersion = '0.7.6.201602180812'
+    jodaVersion = '2.9.3'
+  }
+
+  repositories {
+    mavenCentral()
+    maven { url 'http://repo.spring.io/plugins-release' }
+  }
+
+  dependencies {
+    classpath 'org.springframework.build.gradle:propdeps-plugin:0.0.7'
+  }
+
+}
+
+configure(allprojects) {
+  apply plugin: 'propdeps'
+}
+
+subprojects {
+  apply plugin: 'java'
+  apply plugin: 'maven'
+  apply plugin: 'jacoco'
+  apply plugin: 'sonar-runner'
+
+  group 'com.phorest.events'
+  version '0.0.1-SNAPSHOT'
+
+  repositories {
+    mavenCentral()
+  }
+
+  sourceCompatibility = 1.8
+
+
+  uploadArchives {
+    repositories.mavenDeployer {
+
+      repository(url: mavenRepoReleaseUrl) {
+        authentication(userName: mavenRepoDeployUsername, password: mavenRepoDeployPassword)
+      }
+
+      snapshotRepository(url: mavenRepoSnapshotUrl) {
+        authentication(userName: mavenRepoDeployUsername, password: mavenRepoDeployPassword)
+      }
+    }
+  }
+
+  sonarRunner {
+    sonarProperties {
+      property "sonar.host.url", "http://sonar.phorest.com/"
+      property "sonar.language", "java"
+      property "sonar.jacoco.reportPath", "$buildDir/jacoco/jacocoUnitTest.exec"
+      property "sonar.exclusions", "**/*Configuration*, **/*Application*, **/mock/**"
+      property "sonar.projectName", jar.baseName
+    }
+  }
+
+  jacoco {
+    toolVersion = jacocoVersion
+    reportsDir = file("$buildDir/customJacocoReportDir")
+  }
+
+  test {
+    jacoco {
+      append = false
+      destinationFile = file("$buildDir/jacoco/jacocoUnitTest.exec")
+      classDumpFile = file("$buildDir/jacoco/classpathdumps")
+    }
+  }
+}
+
+
+
