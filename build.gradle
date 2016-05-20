@@ -6,9 +6,11 @@ buildscript {
     mavenRepoDeployUsername = "phorest-user"
     mavenRepoDeployPassword = "5kFmNjiGkUvxV1E9CJPWUF9h"
 
+    cglibVersion = '3.2.2'
     jacksonVersion = '2.7.4'
     jacocoVersion = '0.7.6.201602180812'
     jodaVersion = '2.9.3'
+    spockVersion = '1.0-groovy-2.4'
   }
 
   repositories {
@@ -27,6 +29,7 @@ configure(allprojects) {
 }
 
 subprojects {
+  apply plugin: 'groovy'
   apply plugin: 'java'
   apply plugin: 'maven'
   apply plugin: 'jacoco'

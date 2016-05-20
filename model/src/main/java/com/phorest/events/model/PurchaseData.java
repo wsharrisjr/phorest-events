@@ -9,6 +9,7 @@ import java.util.List;
 @Data
 public class PurchaseData {
   private String branchId;
+  private String businessId;
   private ClientData client;
   private String description;
   private BigDecimal onlineDeposit;
