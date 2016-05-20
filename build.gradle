@@ -63,7 +63,7 @@ subprojects {
       property "sonar.host.url", "http://sonar.phorest.com/"
       property "sonar.language", "java"
       property "sonar.jacoco.reportPath", "$buildDir/jacoco/jacocoUnitTest.exec"
-      property "sonar.exclusions", "**/*Configuration*, **/*Application*, **/mock/**"
+      property "sonar.exclusions", "**/*Configuration*, **/*Application*, **/mock/**, **/model/**"
       property "sonar.projectName", jar.baseName
     }
   }
