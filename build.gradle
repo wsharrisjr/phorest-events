@@ -47,7 +47,7 @@ subprojects {
     repositories.mavenDeployer {
 
       repository(url: mavenRepoReleaseUrl) {
-        authentication(userName: System.getenv('mavenUsername'), password: System.getenv('mavenPassword')
+        authentication(userName: System.getenv('mavenUsername'), password: System.getenv('mavenPassword'))
       }
 
       snapshotRepository(url: mavenRepoSnapshotUrl) {
