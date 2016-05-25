@@ -1,5 +1,6 @@
 package com.phorest.events.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.Data;
@@ -14,8 +15,13 @@ import java.math.BigDecimal;
 })
 public class PurchaseItemData {
   protected String id;
-  protected String itemType;
+  protected ItemType itemType;
   protected String purchaseType;
   protected BigDecimal quantity;
   protected String name;
+
+  @JsonIgnore
+  public boolean isService() {
+    return itemType.isService();
+  }
 }

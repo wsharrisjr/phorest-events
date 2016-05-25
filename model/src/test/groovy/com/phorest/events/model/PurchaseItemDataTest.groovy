@@ -33,7 +33,7 @@ class PurchaseItemDataTest extends Specification {
   }
 
   private static String otherPurchaseItemDataJson() {
-    '{"itemType":"other","name": "some item"}'
+    '{"itemType":"UNKNOWN","name": "some item"}'
   }
 
 }
