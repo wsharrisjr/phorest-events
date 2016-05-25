@@ -47,14 +47,10 @@ subprojects {
     repositories.mavenDeployer {
 
       repository(url: mavenRepoReleaseUrl) {
-       println('mvn user ' + mavenUsername)
-       println('mvn pw ' + mavenPassword)
        authentication(userName: mavenUsername, password: mavenPassword)
       }
 
       snapshotRepository(url: mavenRepoSnapshotUrl) {
-       println('mvn user ' + mavenUsername)
-       println('mvn pw ' + mavenPassword)
         authentication(userName:  mavenUsername, password: mavenPassword)
       }
     }
