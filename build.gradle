@@ -51,7 +51,7 @@ subprojects {
       }
 
       snapshotRepository(url: mavenRepoSnapshotUrl) {
-        authentication(userName:  System.getenv('mavenUsername'), password:  System.getenv('mavenPassword')
+        authentication(userName:  System.getenv('mavenUsername'), password:  System.getenv('mavenPassword'))
       }
     }
   }
