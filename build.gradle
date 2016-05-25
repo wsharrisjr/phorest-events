@@ -3,8 +3,8 @@ buildscript {
     def archivaUrl = "https://archiva.phorest.com"
     mavenRepoReleaseUrl = "$archivaUrl/repository/internal"
     mavenRepoSnapshotUrl = "$archivaUrl/repository/snapshots"
-    mavenRepoDeployUsername = "phorest-user"
-    mavenRepoDeployPassword = "5kFmNjiGkUvxV1E9CJPWUF9h"
+    mavenRepoDeployUsername = $mavenUsername
+    mavenRepoDeployPassword = $mavenPassword
 
     cglibVersion = '3.2.2'
     jacksonVersion = '2.7.4'
