@@ -3,8 +3,6 @@ buildscript {
     def archivaUrl = "https://archiva.phorest.com"
     mavenRepoReleaseUrl = "$archivaUrl/repository/internal"
     mavenRepoSnapshotUrl = "$archivaUrl/repository/snapshots"
-    mavenRepoDeployUsername = $mavenUsername
-    mavenRepoDeployPassword = $mavenPassword
 
     cglibVersion = '3.2.2'
     jacksonVersion = '2.7.4'
@@ -49,11 +47,11 @@ subprojects {
     repositories.mavenDeployer {
 
       repository(url: mavenRepoReleaseUrl) {
-        authentication(userName: mavenRepoDeployUsername, password: mavenRepoDeployPassword)
+        authentication(userName: $mavenUsername, password: $mavenPassword)
       }
 
       snapshotRepository(url: mavenRepoSnapshotUrl) {
-        authentication(userName: mavenRepoDeployUsername, password: mavenRepoDeployPassword)
+        authentication(userName: $mavenUsername, password: $mavenPassword)
       }
     }
   }
