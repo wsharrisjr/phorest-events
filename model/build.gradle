@@ -1,18 +1,13 @@
-
 plugins {
   id 'io.franzbecker.gradle-lombok' version '1.6'
 }
 
 dependencies {
   compile group: 'joda-time', name: 'joda-time', version: jodaVersion
-
   provided group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: jacksonVersion
-
-  testCompile group: 'cglib', name: 'cglib-nodep', version: cglibVersion
-  testCompile group: 'com.fasterxml.jackson.core',  name: 'jackson-databind', version: jacksonVersion
-  testCompile group: 'org.spockframework', name: 'spock-core', version: spockVersion
+  testCompile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: jacksonVersion
 }
 
 jar {
-  baseName "phorest-events-model"
+  baseName 'phorest-events-model'
 }

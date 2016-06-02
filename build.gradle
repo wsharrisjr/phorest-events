@@ -4,11 +4,17 @@ buildscript {
     mavenRepoReleaseUrl = "$archivaUrl/repository/internal"
     mavenRepoSnapshotUrl = "$archivaUrl/repository/snapshots"
 
+    aspectjVersion = '1.8.9'
     cglibVersion = '3.2.2'
     jacksonVersion = '2.7.4'
     jacocoVersion = '0.7.6.201602180812'
     jodaVersion = '2.9.3'
+    slf4jVersion = '1.7.12'
     spockVersion = '1.0-groovy-2.4'
+    springRabbitVersion = '1.5.6.RELEASE'
+    springVersion = '4.2.6.RELEASE'
+
+    modelProject = project.rootProject.project('model')
   }
 
   repositories {
@@ -42,16 +48,20 @@ subprojects {
 
   sourceCompatibility = 1.8
 
+  dependencies {
+    testCompile group: 'cglib', name: 'cglib-nodep', version: cglibVersion
+    testCompile group: 'org.spockframework', name: 'spock-core', version: spockVersion
+  }
 
   uploadArchives {
     repositories.mavenDeployer {
 
       repository(url: mavenRepoReleaseUrl) {
-       authentication(userName: mavenUsername, password: mavenPassword)
+        authentication(userName: getMavenUsername(), password: getMavenPassword())
       }
 
       snapshotRepository(url: mavenRepoSnapshotUrl) {
-        authentication(userName:  mavenUsername, password: mavenPassword)
+        authentication(userName: getMavenUsername(), password: getMavenPassword())
       }
     }
   }
@@ -78,6 +88,14 @@ subprojects {
       classDumpFile = file("$buildDir/jacoco/classpathdumps")
     }
   }
+}
+
+def getMavenPassword() {
+  project.hasProperty('mavenPassword') ? project.property('mavenPassword') : ''
+}
+
+def getMavenUsername() {
+  project.hasProperty('mavenUsername') ? project.property('mavenUsername') : ''
 }
 
 

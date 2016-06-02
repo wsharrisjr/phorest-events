@@ -7,9 +7,11 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor(staticName = "of")
 @NoArgsConstructor
-public class ClientData {
+public class SupplementalPaymentTypeData {
+
     private String id;
-    private String email;
-    private String firstName;
-    private String lastName;
+    private String name;
+    private String description;
+    private String code;
+    private String mode;
 }
