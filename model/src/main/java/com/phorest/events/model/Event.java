@@ -12,13 +12,13 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Event<T> {
-  private String eventId;
-  private DateTime timestamp;
-  String type;
-  @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
-  private T data;
+    private String eventId;
+    private DateTime timestamp;
+    private String type;
+    @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
+    private T data;
 
-  public static <T> Event<T> createNew(String type, T data) {
-    return new Event<>(UUID.randomUUID().toString(), DateTime.now(), type, data);
-  }
+    public static <T extends EventData> Event<T> createNew(String type, T data) {
+        return new Event<>(UUID.randomUUID().toString(), DateTime.now(), type, data);
+    }
 }

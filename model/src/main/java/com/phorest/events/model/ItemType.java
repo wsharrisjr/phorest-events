@@ -8,35 +8,35 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public enum ItemType {
-  OUTSTANDING_BALANCE_PMT,
-  COURSE_SESSION,
-  COURSE,
-  SERVICE_REWARD,
-  PRODUCT_REWARD,
-  PRODUCT,
-  PACKAGE_ITEM,
-  SPECIAL_OFFER_ITEM,
-  SERVICE,
-  VOUCHER,
-  MEMBERSHIP,
-  OPEN_SALE,
-  // todo annotate with @JsonEnumDefaultValue when jackson 2.8.0 will be released
-  UNKNOWN;
+    OUTSTANDING_BALANCE_PMT,
+    COURSE_SESSION,
+    COURSE,
+    SERVICE_REWARD,
+    PRODUCT_REWARD,
+    PRODUCT,
+    PACKAGE_ITEM,
+    SPECIAL_OFFER_ITEM,
+    SERVICE,
+    VOUCHER,
+    MEMBERSHIP,
+    OPEN_SALE,
+    // todo annotate with @JsonEnumDefaultValue when jackson 2.8.0 will be released
+    UNKNOWN;
 
-  private static Map<String, ItemType> itemTypeMapping;
+    private static Map<String, ItemType> itemTypeMapping;
 
-  static {
-    itemTypeMapping = Arrays.asList(ItemType.values())
-      .stream()
-      .collect(Collectors.toMap(ItemType::name, Function.identity()));
-  }
+    static {
+        itemTypeMapping = Arrays.asList(ItemType.values())
+            .stream()
+            .collect(Collectors.toMap(ItemType::name, Function.identity()));
+    }
 
-  @JsonCreator
-  public static ItemType deserialize(String itemTypeName) {
-    return itemTypeMapping.getOrDefault(itemTypeName, UNKNOWN);
-  }
+    @JsonCreator
+    public static ItemType fromString(String itemTypeName) {
+        return itemTypeMapping.getOrDefault(itemTypeName, UNKNOWN);
+    }
 
-  public boolean isService() {
-    return this == SERVICE;
-  }
+    public boolean isService() {
+        return this == SERVICE;
+    }
 }

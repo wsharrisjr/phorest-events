@@ -1,3 +1,3 @@
 rootProject.name = 'phorest-events'
-include 'model'
+include 'model', 'publisher', 'configuration'
 

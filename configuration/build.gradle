@@ -1,0 +1,12 @@
+plugins {
+  id 'io.franzbecker.gradle-lombok' version '1.6'
+}
+
+dependencies {
+  compile group: 'org.springframework.amqp', name: 'spring-rabbit', version: springRabbitVersion
+  compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-joda', version: jacksonVersion
+}
+
+jar {
+  baseName 'phorest-events-configuration'
+}
