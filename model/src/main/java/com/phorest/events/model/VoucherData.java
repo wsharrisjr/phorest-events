@@ -16,6 +16,7 @@ public class VoucherData {
     private DateTime issueDate;
     private BigDecimal discountedOriginalBalance;
     private BigDecimal originalBalance;
+    private BigDecimal remainingBalance;
     private String serial;
     private VoucherDiscountData voucherDiscount;
 

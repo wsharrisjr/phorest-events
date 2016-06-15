@@ -16,8 +16,9 @@ public class VoucherPurchaseItemData extends PurchaseItemData {
     private VoucherData voucherData;
 
     @Builder
-    public VoucherPurchaseItemData(String id, ItemType itemType, String purchaseType, BigDecimal quantity, String name, VoucherData voucherData) {
-        super(id, itemType, purchaseType, quantity, name);
+    public VoucherPurchaseItemData(String id, ItemType itemType, String purchaseType, TotalPriceData totalPriceData, UnitPriceData unitPriceData,
+                                   BigDecimal quantity, String name, VoucherData voucherData) {
+        super(id, itemType, purchaseType, totalPriceData, unitPriceData, quantity, name);
         this.voucherData = voucherData;
     }
 
