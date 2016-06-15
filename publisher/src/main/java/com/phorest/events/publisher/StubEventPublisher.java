@@ -14,6 +14,8 @@ public class StubEventPublisher implements EventPublisher {
 
     @Override
     public void publishEvent(String exchange, String routingKeyTemplate, EventSource eventSource) {
-        logger.info("Publish event called in stub with exchange: {}, routingKeyTemplate: {}, routingKeyArgs: {}, eventSource type: {}", exchange, routingKeyTemplate, eventSource.getRoutingKeyArgs(), eventSource.getClass());
+        if (logger.isDebugEnabled()) {
+            logger.debug("Publish event called in stub with exchange: {}, routingKeyTemplate: {}, routingKeyArgs: {}, eventSource type: {}", exchange, routingKeyTemplate, eventSource.getRoutingKeyArgs(), eventSource.getClass());
+        }
     }
 }
