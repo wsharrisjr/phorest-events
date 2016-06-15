@@ -21,6 +21,8 @@ public class PurchaseItemData {
     private String id;
     private ItemType itemType;
     private String purchaseType;
+    private TotalPriceData totalPriceData;
+    private UnitPriceData unitPriceData;
     private BigDecimal quantity;
     private String name;
 
