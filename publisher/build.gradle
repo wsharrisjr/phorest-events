@@ -3,7 +3,6 @@ dependencies {
 
   compile group: 'org.springframework', name: 'spring-context', version: springVersion
   compile group: 'org.springframework.amqp', name: 'spring-rabbit', version: springRabbitVersion
-  compile group: 'org.aspectj', name: 'aspectjweaver', version: aspectjVersion
   compile group: 'org.slf4j', name: 'slf4j-api', version: slf4jVersion
 }
 

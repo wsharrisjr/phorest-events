@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitOperations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
@@ -25,7 +24,6 @@ public class DefaultEventPublisher implements EventPublisher {
     private ConvertersHolder convertersHolder;
 
     @Override
-    @Async
     public void publishEvent(String exchange, String routingKeyTemplate, EventSource eventSource) {
         logger.info("About to publish event to exchange: {}, with routingKeyTemplate: {}", exchange, routingKeyTemplate);
         String routingKey = RoutingKeyResolver.resolve(routingKeyTemplate, eventSource);
