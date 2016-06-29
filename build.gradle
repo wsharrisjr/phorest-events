@@ -11,7 +11,7 @@ buildscript {
     jodaVersion = '2.9.3'
     slf4jVersion = '1.7.12'
     spockVersion = '1.0-groovy-2.4'
-    springRabbitVersion = '1.5.6.RELEASE'
+    springRabbitVersion = '1.6.0.RELEASE'
     springVersion = '4.2.6.RELEASE'
 
     modelProject = project.rootProject.project('model')
