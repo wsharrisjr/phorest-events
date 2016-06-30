@@ -27,8 +27,8 @@ public enum ItemType {
 
     static {
         itemTypeMapping = Arrays.asList(ItemType.values())
-            .stream()
-            .collect(Collectors.toMap(ItemType::name, Function.identity()));
+                .stream()
+                .collect(Collectors.toMap(ItemType::name, Function.identity()));
     }
 
     @JsonCreator
@@ -38,5 +38,9 @@ public enum ItemType {
 
     public boolean isService() {
         return this == SERVICE;
+    }
+
+    public boolean isProduct() {
+        return this == PRODUCT;
     }
 }

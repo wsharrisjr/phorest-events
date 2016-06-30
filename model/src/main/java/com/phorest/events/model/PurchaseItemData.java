@@ -12,8 +12,8 @@ import java.math.BigDecimal;
 @Data
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "itemType", defaultImpl = PurchaseItemData.class, visible = true)
 @JsonSubTypes({
-    @JsonSubTypes.Type(value = VoucherPurchaseItemData.class, name = "VOUCHER"),
-    @JsonSubTypes.Type(value = ProductPurchaseItemData.class, name = "PRODUCT"),
+        @JsonSubTypes.Type(value = VoucherPurchaseItemData.class, name = "VOUCHER"),
+        @JsonSubTypes.Type(value = ProductPurchaseItemData.class, name = "PRODUCT"),
 })
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,5 +29,10 @@ public class PurchaseItemData {
     @JsonIgnore
     public boolean isService() {
         return itemType.isService();
+    }
+
+    @JsonIgnore
+    public boolean isProduct() {
+        return itemType.isProduct();
     }
 }
