@@ -25,23 +25,26 @@ class PurchaseItemDataTest extends Specification {
     }
 
     @Unroll
-    def "should return correct boolean value  for isX for #itemType"(ItemType itemType, boolean expectedIsService, boolean expectedIsProduct) {
+    def "should return correct boolean value  for isProduct and isService for #itemType"(ItemType itemType, boolean expectedIsService, boolean expectedIsProduct, boolean expectedIsCourse) {
         given:
         PurchaseItemData purchaseItemData = new PurchaseItemData(itemType: itemType)
 
         when:
         boolean actualIsService = purchaseItemData.isService()
         boolean actualIsProduct = purchaseItemData.isProduct()
+        boolean actualIsCourseSession = purchaseItemData.isCourseSession()
 
         then:
         expectedIsService == actualIsService
         expectedIsProduct == actualIsProduct
+        expectedIsCourse == actualIsCourseSession
 
         where:
-        itemType         | expectedIsService | expectedIsProduct
-        ItemType.PRODUCT | false             | true
-        ItemType.SERVICE | true              | false
-        ItemType.UNKNOWN | false             | false
+        itemType                | expectedIsService | expectedIsProduct | expectedIsCourse
+        ItemType.PRODUCT        | false             | true              | false
+        ItemType.SERVICE        | true              | false             | false
+        ItemType.COURSE_SESSION | false             | false             | true
+        ItemType.UNKNOWN        | false             | false             | false
     }
 
     private static String productPurchaseItemDataJson() {
