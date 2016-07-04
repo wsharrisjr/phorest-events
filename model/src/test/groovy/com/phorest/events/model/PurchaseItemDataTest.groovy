@@ -25,7 +25,7 @@ class PurchaseItemDataTest extends Specification {
     }
 
     @Unroll
-    def "should return correct boolean value  for isProduct and isService for #itemType"(ItemType itemType, boolean expectedIsService, boolean expectedIsProduct, boolean expectedIsCourse) {
+    def "should return correct boolean value  for isX for #itemType"(ItemType itemType, boolean expectedIsService, boolean expectedIsProduct, boolean expectedIsCourse) {
         given:
         PurchaseItemData purchaseItemData = new PurchaseItemData(itemType: itemType)
 
