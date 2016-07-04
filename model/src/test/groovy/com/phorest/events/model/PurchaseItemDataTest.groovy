@@ -25,7 +25,7 @@ class PurchaseItemDataTest extends Specification {
     }
 
     @Unroll
-    def "should return correct boolean value  for isX for #itemType"(ItemType itemType, boolean expectedIsService, boolean expectedIsProduct, boolean expectedIsCourse) {
+    def "should return correct boolean value  for isX for #itemType"(ItemType itemType, boolean expectedIsService, boolean expectedIsProduct, boolean expectedIsCourseSession) {
         given:
         PurchaseItemData purchaseItemData = new PurchaseItemData(itemType: itemType)
 
@@ -37,10 +37,10 @@ class PurchaseItemDataTest extends Specification {
         then:
         expectedIsService == actualIsService
         expectedIsProduct == actualIsProduct
-        expectedIsCourse == actualIsCourseSession
+        expectedIsCourseSession == actualIsCourseSession
 
         where:
-        itemType                | expectedIsService | expectedIsProduct | expectedIsCourse
+        itemType                | expectedIsService | expectedIsProduct | expectedIsCourseSession
         ItemType.PRODUCT        | false             | true              | false
         ItemType.SERVICE        | true              | false             | false
         ItemType.COURSE_SESSION | false             | false             | true
