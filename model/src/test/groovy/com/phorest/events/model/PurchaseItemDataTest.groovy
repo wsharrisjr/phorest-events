@@ -4,9 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import static com.phorest.events.model.ItemType.COURSE_SESSION
+import static com.phorest.events.model.ItemType.PRODUCT
+import static com.phorest.events.model.ItemType.SERVICE
+import static com.phorest.events.model.ItemType.UNKNOWN
+
+@Unroll
 class PurchaseItemDataTest extends Specification {
 
-    @Unroll
     def "should deserialize json to expected type"() {
         given:
         ObjectMapper objectMapper = new ObjectMapper()
@@ -24,24 +29,55 @@ class PurchaseItemDataTest extends Specification {
         otherPurchaseItemDataJson()   | PurchaseItemData
     }
 
-    @Unroll
-    def "should return correct boolean value  for isX for #itemType"(ItemType itemType, boolean expectedIsService, boolean expectedIsProduct) {
+    def "should return correct boolean value  for isService for #itemType"() {
         given:
         PurchaseItemData purchaseItemData = new PurchaseItemData(itemType: itemType)
 
         when:
         boolean actualIsService = purchaseItemData.isService()
-        boolean actualIsProduct = purchaseItemData.isProduct()
 
         then:
         expectedIsService == actualIsService
-        expectedIsProduct == actualIsProduct
 
         where:
-        itemType         | expectedIsService | expectedIsProduct
-        ItemType.PRODUCT | false             | true
-        ItemType.SERVICE | true              | false
-        ItemType.UNKNOWN | false             | false
+        itemType | expectedIsService
+        PRODUCT  | false
+        SERVICE  | true
+        UNKNOWN  | false
+    }
+
+    def "should return correct boolean value  for isProduct for #itemType"() {
+        given:
+        PurchaseItemData purchaseItemData = new PurchaseItemData(itemType: itemType)
+
+        when:
+        boolean actualIsService = purchaseItemData.isProduct()
+
+        then:
+        expectedIsService == actualIsService
+
+        where:
+        itemType | expectedIsService
+        PRODUCT  | true
+        SERVICE  | false
+        UNKNOWN  | false
+    }
+
+    def "should return correct boolean value  for isCourseSession for #itemType"() {
+        given:
+        PurchaseItemData purchaseItemData = new PurchaseItemData(itemType: itemType)
+
+        when:
+        boolean actualIsService = purchaseItemData.isCourseSession()
+
+        then:
+        expectedIsService == actualIsService
+
+        where:
+        itemType       | expectedIsService
+        SERVICE        | false
+        COURSE_SESSION | true
+        UNKNOWN        | false
     }
 
     private static String productPurchaseItemDataJson() {

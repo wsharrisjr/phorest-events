@@ -35,4 +35,14 @@ public class PurchaseItemData {
     public boolean isProduct() {
         return itemType.isProduct();
     }
+
+    @JsonIgnore
+    public boolean isCourseSession() {
+        return itemType.isCourseSession();
+    }
+
+    @JsonIgnore
+    public BigDecimal getNetUnitPrice() {
+        return unitPriceData.getNetPrice();
+    }
 }

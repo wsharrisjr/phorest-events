@@ -43,4 +43,8 @@ public enum ItemType {
     public boolean isProduct() {
         return this == PRODUCT;
     }
+
+    public boolean isCourseSession() {
+        return this == COURSE_SESSION;
+    }
 }
