@@ -41,6 +41,7 @@ public class PurchaseItemData {
         return itemType.isCourseSession();
     }
 
+    @JsonIgnore
     public BigDecimal getNetUnitPrice() {
         return unitPriceData.getNetPrice();
     }
