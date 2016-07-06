@@ -40,4 +40,8 @@ public class PurchaseItemData {
     public boolean isCourseSession() {
         return itemType.isCourseSession();
     }
+
+    public BigDecimal getNetUnitPrice() {
+        return unitPriceData.getNetPrice();
+    }
 }

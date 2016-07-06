@@ -24,4 +24,20 @@ public class PurchaseData implements EventData {
     private StaffData staff;
     private String transactionId;
     private VoucherDiscountData voucherDiscount;
+
+    public String getClientId() {
+        return client.getId();
+    }
+
+    public String getClientFirstName() {
+        return client.getFirstName();
+    }
+
+    public String getClientLastName() {
+        return client.getLastName();
+    }
+
+    public String getStaffId() {
+        return staff.getId();
+    }
 }
