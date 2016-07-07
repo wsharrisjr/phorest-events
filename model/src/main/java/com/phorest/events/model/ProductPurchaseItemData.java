@@ -16,9 +16,16 @@ public class ProductPurchaseItemData extends PurchaseItemData {
     private ProductCategoryData productCategory;
 
     @Builder
-    public ProductPurchaseItemData(String id, ItemType itemType, String purchaseType, TotalPriceData totalPriceData, UnitPriceData unitPriceData,
-                                   BigDecimal quantity, String name, ProductCategoryData productCategory) {
-        super(id, itemType, purchaseType, totalPriceData, unitPriceData, quantity, name);
+    public ProductPurchaseItemData(String id,
+                                   ItemType itemType,
+                                   String purchaseType,
+                                   TotalPriceData totalPriceData,
+                                   UnitPriceData unitPriceData,
+                                   DiscountData discountData,
+                                   BigDecimal quantity,
+                                   String name,
+                                   ProductCategoryData productCategory) {
+        super(id, itemType, purchaseType, totalPriceData, unitPriceData, discountData, quantity, name);
         this.productCategory = productCategory;
     }
 

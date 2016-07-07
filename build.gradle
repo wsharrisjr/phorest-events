@@ -40,7 +40,7 @@ subprojects {
   apply plugin: 'sonar-runner'
 
   group 'com.phorest.events'
-  version '0.0.2-SNAPSHOT'
+  version '0.0.3-SNAPSHOT'
 
   repositories {
     mavenCentral()

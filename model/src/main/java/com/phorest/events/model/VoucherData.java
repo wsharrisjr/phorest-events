@@ -18,6 +18,6 @@ public class VoucherData {
     private BigDecimal originalBalance;
     private BigDecimal remainingBalance;
     private String serial;
-    private VoucherDiscountData voucherDiscount;
+    private DiscountData voucherDiscount;
 
 }
