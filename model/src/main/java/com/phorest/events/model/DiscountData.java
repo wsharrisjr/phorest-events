@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 @Data
 @AllArgsConstructor(staticName = "of")
 @NoArgsConstructor
-public class VoucherDiscountData {
+public class DiscountData {
     private String type;
     private BigDecimal value;
 }

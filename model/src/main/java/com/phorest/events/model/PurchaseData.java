@@ -24,7 +24,7 @@ public class PurchaseData implements EventData {
     private List<PurchaseItemData> purchaseItems;
     private StaffData staff;
     private String transactionId;
-    private VoucherDiscountData voucherDiscount;
+    private DiscountData voucherDiscount;
 
     @JsonIgnore
     public String getClientId() {

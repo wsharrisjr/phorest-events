@@ -23,6 +23,7 @@ public class PurchaseItemData {
     private String purchaseType;
     private TotalPriceData totalPriceData;
     private UnitPriceData unitPriceData;
+    private DiscountData discountData;
     private BigDecimal quantity;
     private String name;
 
