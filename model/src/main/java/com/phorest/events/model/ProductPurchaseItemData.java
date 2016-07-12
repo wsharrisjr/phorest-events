@@ -24,8 +24,9 @@ public class ProductPurchaseItemData extends PurchaseItemData {
                                    DiscountData discountData,
                                    BigDecimal quantity,
                                    String name,
-                                   ProductCategoryData productCategory) {
-        super(id, itemType, purchaseType, totalPriceData, unitPriceData, discountData, quantity, name);
+                                   ProductCategoryData productCategory,
+                                   String groupBookingId) {
+        super(id, itemType, purchaseType, totalPriceData, unitPriceData, discountData, quantity, name, groupBookingId);
         this.productCategory = productCategory;
     }
 
