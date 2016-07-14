@@ -94,7 +94,6 @@ subprojects {
 }
 
 release {
-    failOnCommitNeeded = false
     preCommitText = ''
     preTagCommitMessage = '[Gradle Release Plugin] - pre tag commit: '
     tagCommitMessage = '[Gradle Release Plugin] - creating tag: '
