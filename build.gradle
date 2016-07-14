@@ -1,102 +1,120 @@
 buildscript {
-  ext {
-    def archivaUrl = "https://archiva.phorest.com"
-    mavenRepoReleaseUrl = "$archivaUrl/repository/internal"
-    mavenRepoSnapshotUrl = "$archivaUrl/repository/snapshots"
+    ext {
+        def archivaUrl = "https://archiva.phorest.com"
+        mavenRepoReleaseUrl = "$archivaUrl/repository/internal"
+        mavenRepoSnapshotUrl = "$archivaUrl/repository/snapshots"
 
-    aspectjVersion = '1.8.9'
-    cglibVersion = '3.2.2'
-    jacksonVersion = '2.7.4'
-    jacocoVersion = '0.7.6.201602180812'
-    jodaVersion = '2.9.3'
-    slf4jVersion = '1.7.12'
-    spockVersion = '1.0-groovy-2.4'
-    springRabbitVersion = '1.6.0.RELEASE'
-    springVersion = '4.2.6.RELEASE'
+        aspectjVersion = '1.8.9'
+        cglibVersion = '3.2.2'
+        jacksonVersion = '2.7.4'
+        jacocoVersion = '0.7.6.201602180812'
+        jodaVersion = '2.9.3'
+        slf4jVersion = '1.7.12'
+        spockVersion = '1.0-groovy-2.4'
+        springRabbitVersion = '1.6.0.RELEASE'
+        springVersion = '4.2.6.RELEASE'
+        gradleReleasePluginVersion = '2.4.0'
 
-    modelProject = project.rootProject.project('model')
-  }
+        modelProject = project.rootProject.project('model')
+    }
 
-  repositories {
-    mavenCentral()
-    maven { url 'http://repo.spring.io/plugins-release' }
-  }
+    repositories {
+        mavenCentral()
+        maven { url 'http://repo.spring.io/plugins-release' }
+    }
 
-  dependencies {
-    classpath 'org.springframework.build.gradle:propdeps-plugin:0.0.7'
-  }
-
+    dependencies {
+        classpath 'org.springframework.build.gradle:propdeps-plugin:0.0.7'
+        classpath "net.researchgate:gradle-release:${gradleReleasePluginVersion}"
+    }
 }
 
 configure(allprojects) {
-  apply plugin: 'propdeps'
+    apply plugin: 'propdeps'
 }
 
 subprojects {
-  apply plugin: 'groovy'
-  apply plugin: 'java'
-  apply plugin: 'maven'
-  apply plugin: 'jacoco'
-  apply plugin: 'sonar-runner'
+    apply plugin: 'groovy'
+    apply plugin: 'java'
+    apply plugin: 'maven'
+    apply plugin: 'jacoco'
+    apply plugin: 'sonar-runner'
+    apply plugin: 'net.researchgate.release'
 
-  group 'com.phorest.events'
-  version '0.0.3-SNAPSHOT'
-
-  repositories {
-    mavenCentral()
-  }
-
-  sourceCompatibility = 1.8
-
-  dependencies {
-    testCompile group: 'cglib', name: 'cglib-nodep', version: cglibVersion
-    testCompile group: 'org.spockframework', name: 'spock-core', version: spockVersion
-  }
-
-  uploadArchives {
-    repositories.mavenDeployer {
-
-      repository(url: mavenRepoReleaseUrl) {
-        authentication(userName: getMavenUsername(), password: getMavenPassword())
-      }
-
-      snapshotRepository(url: mavenRepoSnapshotUrl) {
-        authentication(userName: getMavenUsername(), password: getMavenPassword())
-      }
+    repositories {
+        mavenCentral()
     }
-  }
 
-  sonarRunner {
-    sonarProperties {
-      property "sonar.host.url", "http://sonar.phorest.com/"
-      property "sonar.language", "java"
-      property "sonar.jacoco.reportPath", "$buildDir/jacoco/jacocoUnitTest.exec"
-      property "sonar.exclusions", "**/*Configuration*, **/*Application*, **/mock/**, **/model/**"
-      property "sonar.projectName", jar.baseName
+    sourceCompatibility = 1.8
+
+    dependencies {
+        testCompile group: 'cglib', name: 'cglib-nodep', version: cglibVersion
+        testCompile group: 'org.spockframework', name: 'spock-core', version: spockVersion
     }
-  }
 
-  jacoco {
-    toolVersion = jacocoVersion
-    reportsDir = file("$buildDir/customJacocoReportDir")
-  }
+    release {
+        failOnCommitNeeded = false
+        preCommitText = ''
+        preTagCommitMessage = '[Gradle Release Plugin] - pre tag commit: '
+        tagCommitMessage = '[Gradle Release Plugin] - creating tag: '
+        newVersionCommitMessage = '[Gradle Release Plugin] - new version commit: '
+        tagTemplate = '${version}'
+        versionPropertyFile = 'gradle.properties'
+        scmAdapters = [
+                net.researchgate.release.GitAdapter
+        ]
 
-  test {
+        git {
+            requireBranch = 'master'
+            pushToRemote = 'origin'
+            pushToBranchPrefix = ''
+            commitVersionFileOnly = false
+        }
+    }
+
+    afterReleaseBuild.dependsOn uploadArchives
+
+    uploadArchives {
+        repositories.mavenDeployer {
+
+            repository(url: mavenRepoReleaseUrl) {
+                authentication(userName: getMavenUsername(), password: getMavenPassword())
+            }
+
+            snapshotRepository(url: mavenRepoSnapshotUrl) {
+                authentication(userName: getMavenUsername(), password: getMavenPassword())
+            }
+        }
+    }
+
+    sonarRunner {
+        sonarProperties {
+            property "sonar.host.url", "http://sonar.phorest.com/"
+            property "sonar.language", "java"
+            property "sonar.jacoco.reportPath", "$buildDir/jacoco/jacocoUnitTest.exec"
+            property "sonar.exclusions", "**/*Configuration*, **/*Application*, **/mock/**, **/model/**"
+            property "sonar.projectName", jar.baseName
+        }
+    }
+
     jacoco {
-      append = false
-      destinationFile = file("$buildDir/jacoco/jacocoUnitTest.exec")
-      classDumpFile = file("$buildDir/jacoco/classpathdumps")
+        toolVersion = jacocoVersion
+        reportsDir = file("$buildDir/customJacocoReportDir")
     }
-  }
+
+    test {
+        jacoco {
+            append = false
+            destinationFile = file("$buildDir/jacoco/jacocoUnitTest.exec")
+            classDumpFile = file("$buildDir/jacoco/classpathdumps")
+        }
+    }
 }
 
 def getMavenPassword() {
-  project.hasProperty('mavenPassword') ? project.property('mavenPassword') : ''
+    project.hasProperty('mavenPassword') ? project.property('mavenPassword') : ''
 }
 
 def getMavenUsername() {
-  project.hasProperty('mavenUsername') ? project.property('mavenUsername') : ''
+    project.hasProperty('mavenUsername') ? project.property('mavenUsername') : ''
 }
-
-
-
