@@ -33,13 +33,15 @@ configure(allprojects) {
     apply plugin: 'propdeps'
 }
 
+apply plugin: 'net.researchgate.release'
+
 subprojects {
     apply plugin: 'groovy'
     apply plugin: 'java'
     apply plugin: 'maven'
     apply plugin: 'jacoco'
     apply plugin: 'sonar-runner'
-    apply plugin: 'net.researchgate.release'
+
 
     repositories {
         mavenCentral()
@@ -51,28 +53,6 @@ subprojects {
         testCompile group: 'cglib', name: 'cglib-nodep', version: cglibVersion
         testCompile group: 'org.spockframework', name: 'spock-core', version: spockVersion
     }
-
-    release {
-        failOnCommitNeeded = false
-        preCommitText = ''
-        preTagCommitMessage = '[Gradle Release Plugin] - pre tag commit: '
-        tagCommitMessage = '[Gradle Release Plugin] - creating tag: '
-        newVersionCommitMessage = '[Gradle Release Plugin] - new version commit: '
-        tagTemplate = '${version}'
-        versionPropertyFile = 'gradle.properties'
-        scmAdapters = [
-                net.researchgate.release.GitAdapter
-        ]
-
-        git {
-            requireBranch = 'master'
-            pushToRemote = 'origin'
-            pushToBranchPrefix = ''
-            commitVersionFileOnly = false
-        }
-    }
-
-    afterReleaseBuild.dependsOn uploadArchives
 
     uploadArchives {
         repositories.mavenDeployer {
@@ -109,7 +89,30 @@ subprojects {
             classDumpFile = file("$buildDir/jacoco/classpathdumps")
         }
     }
+
+    afterReleaseBuild.dependsOn uploadArchives
 }
+
+release {
+    failOnCommitNeeded = false
+    preCommitText = ''
+    preTagCommitMessage = '[Gradle Release Plugin] - pre tag commit: '
+    tagCommitMessage = '[Gradle Release Plugin] - creating tag: '
+    newVersionCommitMessage = '[Gradle Release Plugin] - new version commit: '
+    tagTemplate = '${version}'
+    versionPropertyFile = 'gradle.properties'
+    scmAdapters = [
+            net.researchgate.release.GitAdapter
+    ]
+
+    git {
+        requireBranch = 'master'
+        pushToRemote = 'origin'
+        pushToBranchPrefix = ''
+        commitVersionFileOnly = false
+    }
+}
+
 
 def getMavenPassword() {
     project.hasProperty('mavenPassword') ? project.property('mavenPassword') : ''
