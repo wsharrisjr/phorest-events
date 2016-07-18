@@ -9,6 +9,7 @@ buildscript {
         jacksonVersion = '2.7.4'
         jacocoVersion = '0.7.6.201602180812'
         jodaVersion = '2.9.3'
+        metricsVersion = '1.0.0'
         slf4jVersion = '1.7.12'
         spockVersion = '1.0-groovy-2.4'
         springRabbitVersion = '1.6.0.RELEASE'
@@ -45,6 +46,13 @@ subprojects {
 
     repositories {
         mavenCentral()
+        maven {
+            url mavenRepoSnapshotUrl
+        }
+        maven {
+            url mavenRepoReleaseUrl
+        }
+        mavenLocal()
     }
 
     sourceCompatibility = 1.8
