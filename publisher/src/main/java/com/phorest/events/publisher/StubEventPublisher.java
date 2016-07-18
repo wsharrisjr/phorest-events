@@ -1,5 +1,6 @@
 package com.phorest.events.publisher;
 
+import com.codahale.metrics.annotation.Timed;
 import com.phorest.events.model.EventSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +14,7 @@ public class StubEventPublisher implements EventPublisher {
     private static final Logger logger = LoggerFactory.getLogger(StubEventPublisher.class);
 
     @Override
+    @Timed(name = "publish-event-stub")
     public void publishEvent(String exchange, String routingKeyTemplate, EventSource eventSource) {
         if (logger.isDebugEnabled()) {
             logger.debug("Publish event called in stub with exchange: {}, routingKeyTemplate: {}, routingKeyArgs: {}, eventSource type: {}", exchange, routingKeyTemplate, eventSource.getRoutingKeyArgs(), eventSource.getClass());

@@ -1,5 +1,6 @@
 package com.phorest.events.publisher;
 
+import com.codahale.metrics.annotation.Timed;
 import com.phorest.events.model.Event;
 import com.phorest.events.model.EventData;
 import com.phorest.events.model.EventSource;
@@ -24,6 +25,7 @@ public class DefaultEventPublisher implements EventPublisher {
     private ConvertersHolder convertersHolder;
 
     @Override
+    @Timed(name = "publish-event-default")
     public void publishEvent(String exchange, String routingKeyTemplate, EventSource eventSource) {
         logger.info("About to publish event to exchange: {}, with routingKeyTemplate: {}", exchange, routingKeyTemplate);
         String routingKey = RoutingKeyResolver.resolve(routingKeyTemplate, eventSource);

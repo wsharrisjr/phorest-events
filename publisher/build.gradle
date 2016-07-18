@@ -1,6 +1,7 @@
 dependencies {
   provided modelProject
 
+  compile group: 'com.phorest.metrics', name: 'phorest-spring-metrics-configuration', version: metricsVersion
   compile group: 'org.springframework', name: 'spring-context', version: springVersion
   compile group: 'org.springframework.amqp', name: 'spring-rabbit', version: springRabbitVersion
   compile group: 'org.slf4j', name: 'slf4j-api', version: slf4jVersion
