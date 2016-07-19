@@ -10,6 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.retry.RetryPolicy;
+import org.springframework.retry.backoff.BackOffPolicy;
+import org.springframework.retry.backoff.ExponentialBackOffPolicy;
+import org.springframework.retry.policy.SimpleRetryPolicy;
+import org.springframework.retry.support.RetryTemplate;
 
 @Profile("amqp")
 @Configuration
@@ -25,6 +30,7 @@ public class RabbitTemplateConfiguration {
     public RabbitTemplate rabbitTemplate() {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
         rabbitTemplate.setMessageConverter(jackson2JsonMessageConverter());
+        rabbitTemplate.setRetryTemplate(retryTemplate());
         return rabbitTemplate;
     }
 
@@ -40,4 +46,22 @@ public class RabbitTemplateConfiguration {
         return converter;
     }
 
+    private RetryTemplate retryTemplate() {
+        RetryTemplate retryTemplate = new RetryTemplate();
+        retryTemplate.setRetryPolicy(retryPolicy());
+        retryTemplate.setBackOffPolicy(backOffPolicy());
+        return retryTemplate;
+    }
+
+    private RetryPolicy retryPolicy() {
+        return new SimpleRetryPolicy();
+    }
+
+    private BackOffPolicy backOffPolicy() {
+        ExponentialBackOffPolicy backOffPolicy = new ExponentialBackOffPolicy();
+        backOffPolicy.setInitialInterval(1000L);
+        backOffPolicy.setMultiplier(3.0);
+        backOffPolicy.setMaxInterval(30000L);
+        return backOffPolicy;
+    }
 }
