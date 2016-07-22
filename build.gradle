@@ -82,6 +82,8 @@ subprojects {
             property "sonar.jacoco.reportPath", "$buildDir/jacoco/jacocoUnitTest.exec"
             property "sonar.exclusions", "**/*Configuration*, **/*Application*, **/mock/**, **/model/**"
             property "sonar.projectName", jar.baseName
+            property "sonar.login", getSonarUser()
+            property "sonar.password", getSonarPassword()
         }
     }
 
@@ -127,4 +129,12 @@ def getMavenPassword() {
 
 def getMavenUsername() {
     project.hasProperty('mavenUsername') ? project.property('mavenUsername') : ''
+}
+
+def getSonarUser() {
+    project.hasProperty("sonarUser") ? project.property('sonarUser') : ''
+}
+
+def getSonarPassword() {
+    project.hasProperty("sonarPassword") ? project.property('sonarPassword') : ''
 }
