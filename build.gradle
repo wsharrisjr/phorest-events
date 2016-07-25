@@ -84,6 +84,8 @@ subprojects {
             property "sonar.projectName", jar.baseName
             property "sonar.login", getSonarUser()
             property "sonar.password", getSonarPassword()
+            property "sonar.java.binaries", project.sourceSets.main.runtimeClasspath.filter { it.exists() }
+            property "sonar.java.libraries", project.sourceSets.main.runtimeClasspath.filter { it.exists() }
         }
     }
 
