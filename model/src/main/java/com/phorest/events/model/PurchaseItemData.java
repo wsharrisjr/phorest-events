@@ -27,6 +27,7 @@ public class PurchaseItemData {
     private BigDecimal quantity;
     private String name;
     private String groupBookingId;
+    private StaffData staff;
 
     @JsonIgnore
     public boolean isService() {

@@ -25,8 +25,9 @@ public class VoucherPurchaseItemData extends PurchaseItemData {
                                    BigDecimal quantity,
                                    String name,
                                    VoucherData voucherData,
-                                   String groupBookingId) {
-        super(id, itemType, purchaseType, totalPriceData, unitPriceData, discountData, quantity, name, groupBookingId);
+                                   String groupBookingId,
+                                   StaffData staff) {
+        super(id, itemType, purchaseType, totalPriceData, unitPriceData, discountData, quantity, name, groupBookingId, staff);
         this.voucherData = voucherData;
     }
 
