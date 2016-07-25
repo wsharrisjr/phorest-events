@@ -13,4 +13,5 @@ public class PaymentData {
     private BigDecimal amount;
     private String type;
     private SupplementalPaymentTypeData supplementalPaymentType;
+    private String thirdPartyReference;
 }
