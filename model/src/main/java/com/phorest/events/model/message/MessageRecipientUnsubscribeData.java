@@ -9,7 +9,7 @@ import org.joda.time.DateTime;
 @Data
 @AllArgsConstructor(staticName = "of")
 @NoArgsConstructor
-public class MessageReceipientUnsubscribeData implements EventData {
+public class MessageRecipientUnsubscribeData implements EventData {
     private String providedMessageId;
     private DateTime timestamp;
     private String address;
