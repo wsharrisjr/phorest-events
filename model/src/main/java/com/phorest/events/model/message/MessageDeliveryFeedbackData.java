@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MessageDeliveryFeedbackData implements EventData {
     private String messageId;
+    private String providedMessageId;
     private DeliveryStatus deliveryStatus;
     private MessageFailureData failure;
 
