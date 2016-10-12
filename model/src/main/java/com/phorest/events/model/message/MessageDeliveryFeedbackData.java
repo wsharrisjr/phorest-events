@@ -12,6 +12,7 @@ import org.joda.time.DateTime;
 @NoArgsConstructor
 public class MessageDeliveryFeedbackData implements EventData {
     private String messageId;
+    private String bundleId;
     private String providedMessageId;
     private DeliveryStatus deliveryStatus;
     private MessageFailureData failure;
