@@ -19,13 +19,13 @@ public class MessageDeliveryFeedbackData implements EventData {
     private DateTime timestamp;
 
     @JsonIgnore
-    public boolean isFailed() {
-        return deliveryStatus.isFailed();
+    public FailureReasonType getFailureReasonType() {
+        return failure.getType();
     }
 
     @JsonIgnore
-    public boolean isPermanentFailure() {
-        return isFailed() && failure.isPermanentFailure();
+    public String getFailureDescription() {
+        return failure.getDescription();
     }
 
 }

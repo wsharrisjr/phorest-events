@@ -5,8 +5,4 @@ public enum DeliveryStatus {
     SUBMITTED,
     FAILED,
     UNKNOWN;
-
-    public boolean isFailed() {
-        return this == FAILED;
-    }
 }
