@@ -16,4 +16,9 @@ public class MessageFailureData {
     public boolean isPermanentFailure() {
         return type.isPermanentFailure();
     }
+
+    @JsonIgnore
+    public boolean isPermanentlyBlockedByUser() {
+        return type.isPermanentlyBlockedByUser();
+    }
 }
