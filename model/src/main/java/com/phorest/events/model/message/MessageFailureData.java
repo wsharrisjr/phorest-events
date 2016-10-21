@@ -14,11 +14,15 @@ public class MessageFailureData {
 
     @JsonIgnore
     public boolean isPermanentFailure() {
-        return type.isPermanentFailure();
+        return hasReasonType() && type.isPermanentFailure();
     }
 
     @JsonIgnore
     public boolean isPermanentlyBlockedByUser() {
-        return type.isPermanentlyBlockedByUser();
+        return hasReasonType() && type.isPermanentlyBlockedByUser();
+    }
+
+    private boolean hasReasonType() {
+        return type != null;
     }
 }
