@@ -29,4 +29,8 @@ public enum FailureReasonType {
     public boolean isPermanentFailure() {
         return PERMANENT_FAILURES.contains(this);
     }
+
+    public boolean isPermanentlyBlockedByUser() {
+        return this == DESTINATION_PERMANENTLY_BLOCKED;
+    }
 }

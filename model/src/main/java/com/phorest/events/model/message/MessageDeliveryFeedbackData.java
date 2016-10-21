@@ -28,4 +28,9 @@ public class MessageDeliveryFeedbackData implements EventData {
         return failure.getDescription();
     }
 
+    @JsonIgnore
+    public boolean isPermanentlyBlockedByUser()  {
+        return failure.isPermanentlyBlockedByUser();
+    }
+
 }
