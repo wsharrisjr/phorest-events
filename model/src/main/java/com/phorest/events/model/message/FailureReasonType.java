@@ -1,7 +1,14 @@
 package com.phorest.events.model.message;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.phorest.events.model.ItemType;
+
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public enum FailureReasonType {
     DESTINATION_PERMANENTLY_BLOCKED,
@@ -24,6 +31,18 @@ public enum FailureReasonType {
         PERMANENT_FAILURES.add(MESSAGE_SPAM);
         PERMANENT_FAILURES.add(PERMANENTLY_BLOCKED_BY_PROVIDER);
         PERMANENT_FAILURES.add(UNDETERMINED_PERMANENT_ERROR);
+    }
+
+    private static Map<String, FailureReasonType> failureReasonTypeMapping;
+
+    static {
+        failureReasonTypeMapping = Arrays.stream(FailureReasonType.values())
+                .collect(Collectors.toMap(FailureReasonType::name, Function.identity()));
+    }
+
+    @JsonCreator
+    public static FailureReasonType fromString(String failureReasonName) {
+        return failureReasonTypeMapping.getOrDefault(failureReasonName, null);
     }
 
     public boolean isPermanentFailure() {
