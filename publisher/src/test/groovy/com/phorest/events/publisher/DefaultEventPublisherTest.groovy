@@ -3,6 +3,7 @@ package com.phorest.events.publisher
 import com.phorest.events.model.Event
 import com.phorest.events.model.EventData
 import com.phorest.events.model.EventSource
+import org.springframework.amqp.core.MessagePostProcessor
 import org.springframework.amqp.rabbit.core.RabbitOperations
 import spock.lang.Specification
 
@@ -45,6 +46,6 @@ class DefaultEventPublisherTest extends Specification {
     then:
     1 * convertersHolder.getConverter(_ as Class<?>) >> converter
     1 * converter.convert(eventSource) >> event
-    1 * rabbitOperations.convertAndSend(exchange, 'routingTemplate-arg', event)
+    1 * rabbitOperations.convertAndSend(exchange, 'routingTemplate-arg', event, _ as MessagePostProcessor)
   }
 }
