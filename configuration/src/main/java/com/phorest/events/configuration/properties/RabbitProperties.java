@@ -29,6 +29,9 @@ public class RabbitProperties {
     @Value("${phorest.events.configuration.rabbit.connectionTimeoutInMillis:10000}")
     private int connectionTimeoutInMillis;
 
+    @Value("${phorest.events.configuration.rabbit.requestedHeartbeatInSeconds:60}")
+    private int requestedHeartbeat;
+
     @Autowired
     private Ssl ssl;
 }

@@ -21,6 +21,7 @@ public class RabbitConnectionConfiguration {
         factory.setPassword(config.getPassword());
         factory.setVirtualHost(config.getVirtualHost());
         factory.setConnectionTimeout(config.getConnectionTimeoutInMillis());
+        factory.setRequestedHeartbeat(config.getRequestedHeartbeat());
         configureSslIfNeeded(config, factory);
         factory.afterPropertiesSet();
         CachingConnectionFactory connectionFactory = new CachingConnectionFactory(factory.getObject());
