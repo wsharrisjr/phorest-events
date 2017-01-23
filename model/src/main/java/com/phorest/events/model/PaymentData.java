@@ -14,4 +14,5 @@ public class PaymentData {
     private String type;
     private SupplementalPaymentTypeData supplementalPaymentType;
     private String serialNumber;
+    private VoucherData voucherData;
 }
