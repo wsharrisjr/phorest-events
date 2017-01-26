@@ -31,18 +31,18 @@ public class DefaultEventPublisher implements EventPublisher {
     @Override
     @Timed(name = "convert-and-publish-event-default")
     public void publishEvent(String exchange, String routingKeyTemplate, EventSource eventSource, Header... headers) {
-        logger.info("About to publish event to exchange: {}, with routingKeyTemplate: {}", exchange, routingKeyTemplate);
+        logger.debug("About to publish event to exchange: {}, with routingKeyTemplate: {}", exchange, routingKeyTemplate);
         String routingKey = RoutingKeyResolver.resolve(routingKeyTemplate, eventSource);
         publishEvent(exchange, routingKey, convertToEvent(eventSource), headers);
-        logger.info("Published event to exchange: {}, with routingKey: {}", exchange, routingKey);
+        logger.debug("Published event to exchange: {}, with routingKey: {}", exchange, routingKey);
     }
 
     @Override
     @Timed(name = "publish-event-default")
     public <T extends EventData> void publishEvent(String exchange, String routingKey, Event<T> event, Header... headers) {
-        logger.info("About to publish event to exchange: {}, with routingKey: {}", exchange, routingKey);
+        logger.debug("About to publish event to exchange: {}, with routingKey: {}", exchange, routingKey);
         rabbitOperations.convertAndSend(exchange, routingKey, event, getMessagePostProcessor(exchange, routingKey, headers));
-        logger.info("Published event to exchange: {}, with routingKey: {}", exchange, routingKey);
+        logger.debug("Published event to exchange: {}, with routingKey: {}", exchange, routingKey);
     }
 
     private Event<EventData> convertToEvent(EventSource eventSource) {
