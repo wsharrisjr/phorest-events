@@ -1,6 +1,5 @@
 package com.phorest.events.configuration;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.annotation.RabbitListenerConfigurer;
 import org.springframework.amqp.rabbit.listener.RabbitListenerEndpointRegistrar;
@@ -17,7 +16,7 @@ import org.springframework.messaging.handler.annotation.support.DefaultMessageHa
 public class RabbitListenerConfiguration implements RabbitListenerConfigurer {
 
     @Autowired
-    private ObjectMapper rabbitObjectMapper;
+    private ObjectMapperProvider omProvider;
 
     @Override
     public void configureRabbitListeners(RabbitListenerEndpointRegistrar registrar) {
@@ -34,7 +33,7 @@ public class RabbitListenerConfiguration implements RabbitListenerConfigurer {
     @Bean
     public MappingJackson2MessageConverter mappingJackson2MessageConverter() {
         MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
-        converter.setObjectMapper(rabbitObjectMapper);
+        converter.setObjectMapper(omProvider.getObjectMapper());
         return converter;
     }
 

@@ -1,6 +1,5 @@
 package com.phorest.events.configuration;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
@@ -24,7 +23,7 @@ public class RabbitTemplateConfiguration {
     private ConnectionFactory connectionFactory;
 
     @Autowired
-    private ObjectMapper rabbitObjectMapper;
+    private ObjectMapperProvider omProvider;
 
     @Bean
     public RabbitTemplate rabbitTemplate() {
@@ -42,7 +41,7 @@ public class RabbitTemplateConfiguration {
     @Bean
     public Jackson2JsonMessageConverter jackson2JsonMessageConverter() {
         Jackson2JsonMessageConverter converter = new Jackson2JsonMessageConverter();
-        converter.setJsonObjectMapper(rabbitObjectMapper);
+        converter.setJsonObjectMapper(omProvider.getObjectMapper());
         return converter;
     }
 
