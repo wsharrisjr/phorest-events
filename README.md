@@ -3,7 +3,7 @@
 Defining the Phorest Cloud events model.
 
 
-## v.1.1.9
+## v.1.1.7
 - added DelayedRetryMessageRecoverer
 - use the following properties to customize retry policy:
     * `phorest.events.configuration.rabbit.retry.minDelay`
