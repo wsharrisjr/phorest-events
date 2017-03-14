@@ -7,17 +7,6 @@ import spock.lang.Unroll
 @Unroll
 class ConvertersHolderTest extends Specification {
 
-  def "should throw an Exception if there are no converters defined"() {
-    given:
-    ConvertersHolder convertersHolder = new ConvertersHolder(converters: [])
-
-    when:
-    convertersHolder.init()
-
-    then:
-    thrown(IllegalArgumentException)
-  }
-
   def "should provide expected converter"() {
     given:
     ConvertersHolder convertersHolder = new ConvertersHolder(converters: converters)

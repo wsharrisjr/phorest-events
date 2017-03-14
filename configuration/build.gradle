@@ -3,8 +3,9 @@ plugins {
 }
 
 dependencies {
-  compile group: 'org.springframework.amqp', name: 'spring-rabbit', version: springRabbitVersion
   compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-joda', version: jacksonVersion
+  compile group: 'org.slf4j', name: 'slf4j-api', version: slf4jVersion
+  compile group: 'org.springframework.amqp', name: 'spring-rabbit', version: springRabbitVersion
 }
 
 jar {

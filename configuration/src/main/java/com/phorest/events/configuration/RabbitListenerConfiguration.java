@@ -1,14 +1,24 @@
 package com.phorest.events.configuration;
 
+import com.phorest.events.configuration.retry.DelayedRetryMessageRecoverer;
+import com.phorest.events.configuration.retry.RetryDelayCalculator;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.annotation.RabbitListenerConfigurer;
+import org.springframework.amqp.rabbit.config.RetryInterceptorBuilder;
+import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.listener.RabbitListenerEndpointRegistrar;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.handler.annotation.support.DefaultMessageHandlerMethodFactory;
+import org.springframework.retry.interceptor.RetryOperationsInterceptor;
+import org.springframework.transaction.PlatformTransactionManager;
+
 
 @Profile("amqp")
 @Configuration
@@ -17,6 +27,38 @@ public class RabbitListenerConfiguration implements RabbitListenerConfigurer {
 
     @Autowired
     private ObjectMapperProvider omProvider;
+
+    @Autowired
+    private RetryDelayCalculator retryDelayCalculator;
+
+    @Autowired(required = false)
+    private PlatformTransactionManager transactionManager;
+
+    @Value("${phorest.events.configuration.rabbit.retry.maxRetryAttempts:10}")
+    private int maxRetryAttempts;
+
+    @Value("${phorest.events.configuration.rabbit.maxConcurrentConsumers:30}")
+    private int maxConcurrentConsumers;
+
+    @Bean
+    public SimpleRabbitListenerContainerFactory rabbitListenerContainerFactory(ConnectionFactory connectionFactory, RetryOperationsInterceptor retryInterceptor) {
+        SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
+        factory.setConnectionFactory(connectionFactory);
+        factory.setMaxConcurrentConsumers(maxConcurrentConsumers);
+        factory.setAdviceChain(retryInterceptor);
+        if (transactionManager != null) {
+            factory.setTransactionManager(transactionManager);
+        }
+        return factory;
+    }
+
+    @Bean
+    RetryOperationsInterceptor retryInterceptor(RabbitTemplate rabbitTemplate) {
+        return RetryInterceptorBuilder.stateless()
+                .maxAttempts(1)
+                .recoverer(new DelayedRetryMessageRecoverer(rabbitTemplate, retryDelayCalculator, maxRetryAttempts))
+                .build();
+    }
 
     @Override
     public void configureRabbitListeners(RabbitListenerEndpointRegistrar registrar) {
