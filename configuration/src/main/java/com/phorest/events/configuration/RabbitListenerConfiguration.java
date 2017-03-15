@@ -3,19 +3,16 @@ package com.phorest.events.configuration;
 import com.phorest.events.configuration.retry.DelayedRetryMessageRecoverer;
 import com.phorest.events.configuration.retry.RetryDelayCalculator;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
-import org.springframework.amqp.rabbit.annotation.RabbitListenerConfigurer;
 import org.springframework.amqp.rabbit.config.RetryInterceptorBuilder;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.amqp.rabbit.listener.RabbitListenerEndpointRegistrar;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.messaging.converter.MappingJackson2MessageConverter;
-import org.springframework.messaging.handler.annotation.support.DefaultMessageHandlerMethodFactory;
 import org.springframework.retry.interceptor.RetryOperationsInterceptor;
 import org.springframework.transaction.PlatformTransactionManager;
 
@@ -23,10 +20,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 @Profile("amqp")
 @Configuration
 @EnableRabbit
-public class RabbitListenerConfiguration implements RabbitListenerConfigurer {
-
-    @Autowired
-    private ObjectMapperProvider omProvider;
+public class RabbitListenerConfiguration {
 
     @Autowired
     private RetryDelayCalculator retryDelayCalculator;
@@ -41,7 +35,7 @@ public class RabbitListenerConfiguration implements RabbitListenerConfigurer {
     private int maxConcurrentConsumers;
 
     @Bean
-    public SimpleRabbitListenerContainerFactory rabbitListenerContainerFactory(ConnectionFactory connectionFactory, RetryOperationsInterceptor retryInterceptor) {
+    public SimpleRabbitListenerContainerFactory rabbitListenerContainerFactory(ConnectionFactory connectionFactory, RetryOperationsInterceptor retryInterceptor, Jackson2JsonMessageConverter jsonConverter) {
         SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
         factory.setConnectionFactory(connectionFactory);
         factory.setMaxConcurrentConsumers(maxConcurrentConsumers);
@@ -49,6 +43,7 @@ public class RabbitListenerConfiguration implements RabbitListenerConfigurer {
         if (transactionManager != null) {
             factory.setTransactionManager(transactionManager);
         }
+        factory.setMessageConverter(jsonConverter);
         return factory;
     }
 
@@ -58,25 +53,6 @@ public class RabbitListenerConfiguration implements RabbitListenerConfigurer {
                 .maxAttempts(1)
                 .recoverer(new DelayedRetryMessageRecoverer(rabbitTemplate, retryDelayCalculator, maxRetryAttempts))
                 .build();
-    }
-
-    @Override
-    public void configureRabbitListeners(RabbitListenerEndpointRegistrar registrar) {
-        registrar.setMessageHandlerMethodFactory(defaultMessageHandlerMethodFactory());
-    }
-
-    @Bean
-    public DefaultMessageHandlerMethodFactory defaultMessageHandlerMethodFactory() {
-        DefaultMessageHandlerMethodFactory factory = new DefaultMessageHandlerMethodFactory();
-        factory.setMessageConverter(mappingJackson2MessageConverter());
-        return factory;
-    }
-
-    @Bean
-    public MappingJackson2MessageConverter mappingJackson2MessageConverter() {
-        MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
-        converter.setObjectMapper(omProvider.getObjectMapper());
-        return converter;
     }
 
 }
