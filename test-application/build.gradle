@@ -1,0 +1,73 @@
+buildscript {
+    ext {
+        gradleDockerComposePluginVersion = '0.3.20'
+    }
+    repositories {
+        mavenCentral()
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.2.RELEASE")
+        classpath "com.avast.gradle:docker-compose-gradle-plugin:${gradleDockerComposePluginVersion}"
+    }
+}
+
+apply plugin: 'docker-compose'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'groovy'
+
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+    provided project.rootProject.project('configuration')
+    provided project.rootProject.project('publisher')
+    provided project.rootProject.project('model')
+
+    compile "org.codehaus.groovy:groovy"
+    compile 'org.springframework.boot:spring-boot-starter-web'
+
+    testCompile "com.jayway.restassured:rest-assured:2.9.0"
+    testCompile "info.cukes:cucumber-groovy:1.2.5"
+}
+
+jar {
+    baseName 'phorest-events-test-application'
+}
+
+task testAcceptanceLocal(dependsOn: ['assemble', 'compileTestGroovy']) {
+    doLast {
+        javaexec {
+            main = "cucumber.api.cli.Main"
+            classpath = sourceSets.test.runtimeClasspath
+            args = ['--plugin', 'pretty', '--glue', 'src/test/groovy/acceptance/steps', 'src/test/resources/features',
+                    '-f', 'html:build/reports/tests/acceptance/local/html',
+                    '-f', 'json:build/reports/tests/acceptance/local/json/index.json'
+            ]
+            jvmArgs = ["-Dapi.server.port=${testAppPort}"]
+        }
+    }
+}
+
+def getTestAppPort() {
+    def app = dockerCompose.servicesInfos.testapp
+    app.ports[19980]
+}
+
+dockerCompose.isRequiredBy(testAcceptanceLocal)
+
+build.dependsOn testAcceptanceLocal
+
+dockerCompose {
+    waitForTcpPorts = false
+    boolean keepContainers = getKeepContainers() as boolean
+    println "keep containers: ${keepContainers}"
+    stopContainers = !keepContainers
+    removeContainers = !keepContainers
+    captureContainersOutput = true
+}
+
+def getKeepContainers() {
+    project.hasProperty("keepContainers") ? project.property('keepContainers') : false
+}
