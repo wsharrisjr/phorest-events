@@ -2,6 +2,9 @@
 
 Defining the Phorest Cloud events model.
 
+## v.1.1.8
+- fixed object mapper for rabbit connection factory to use joda time module
+- removed unsed beans
 
 ## v.1.1.7
 - added DelayedRetryMessageRecoverer
