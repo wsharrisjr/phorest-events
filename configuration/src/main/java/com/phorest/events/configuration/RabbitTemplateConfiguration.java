@@ -30,6 +30,7 @@ public class RabbitTemplateConfiguration {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
         rabbitTemplate.setMessageConverter(jackson2JsonMessageConverter());
         rabbitTemplate.setRetryTemplate(retryTemplate());
+        rabbitTemplate.setChannelTransacted(true);
         return rabbitTemplate;
     }
 
