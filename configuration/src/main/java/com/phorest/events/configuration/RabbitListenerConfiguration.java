@@ -42,6 +42,7 @@ public class RabbitListenerConfiguration {
         factory.setAdviceChain(retryInterceptor);
         if (transactionManager != null) {
             factory.setTransactionManager(transactionManager);
+            factory.setChannelTransacted(true);
         }
         factory.setMessageConverter(jsonConverter);
         return factory;
