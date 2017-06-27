@@ -1,7 +1,7 @@
 version: '2'
 services:
     rabbit:
-      image: docker.phorest.com/rabbitmq-server:latest
+      image: 613227801076.dkr.ecr.eu-west-1.amazonaws.com/rabbitmq-server:latest
       environment:
         - "RABBITMQ_ERLANG_COOKIE=randomcookie"
         - "RABBITMQ_DEFAULT_USER=rabbit"

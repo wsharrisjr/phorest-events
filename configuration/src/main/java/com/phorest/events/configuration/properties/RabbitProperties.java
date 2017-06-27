@@ -32,6 +32,9 @@ public class RabbitProperties {
     @Value("${phorest.events.configuration.rabbit.requestedHeartbeatInSeconds:60}")
     private int requestedHeartbeat;
 
+    @Value("${phorest.events.configuration.rabbit.autoRecoveryEnabled:true}")
+    private boolean autoRecoveryEnabled;
+
     @Autowired
     private Ssl ssl;
 }
