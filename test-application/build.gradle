@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        gradleDockerComposePluginVersion = '0.3.20'
+        gradleDockerComposePluginVersion = '0.4.3'
     }
     repositories {
         mavenCentral()
@@ -28,46 +28,44 @@ dependencies {
     compile "org.codehaus.groovy:groovy"
     compile 'org.springframework.boot:spring-boot-starter-web'
 
-    testCompile "com.jayway.restassured:rest-assured:2.9.0"
-    testCompile "info.cukes:cucumber-groovy:1.2.5"
+    testCompile "org.springframework.boot:spring-boot-starter-test"
+    testCompile "org.spockframework:spock-spring"
+    testCompile "org.springframework.amqp:spring-rabbit-test:${springRabbitVersion}"
+    testCompile "org.awaitility:awaitility-groovy:3.0.0"
 }
 
 jar {
     baseName 'phorest-events-test-application'
 }
 
-task testAcceptanceLocal(dependsOn: ['assemble', 'compileTestGroovy']) {
-    doLast {
-        javaexec {
-            main = "cucumber.api.cli.Main"
-            classpath = sourceSets.test.runtimeClasspath
-            args = ['--plugin', 'pretty', '--glue', 'src/test/groovy/acceptance/steps', 'src/test/resources/features',
-                    '-f', 'html:build/reports/tests/acceptance/local/html',
-                    '-f', 'json:build/reports/tests/acceptance/local/json/index.json'
-            ]
-            jvmArgs = ["-Dapi.server.port=${testAppPort}"]
-        }
+test {
+    reports {
+        junitXml.destination = "$buildDir/test-results/unit-test"
+        html.destination = "$buildDir/reports/unit-test"
+    }
+    exclude '**/integration/**'
+}
+
+task integrationTests(type: Test) {
+    include '**/integration/**'
+
+    reports {
+        junitXml.destination = "$buildDir/test-results/integration-test"
+        html.destination = "$buildDir/reports/integration-test"
     }
 }
 
-def getTestAppPort() {
-    def app = dockerCompose.servicesInfos.testapp
-    app.ports[19980]
+integrationTests.doFirst {
+    println dockerCompose.servicesInfos.rabbit.rabbit_1.ports[5672]
+    systemProperty 'phorest.events.configuration.rabbit.addresses', "localhost:${dockerCompose.servicesInfos.rabbit.rabbit_1.ports[5672]}"
 }
 
-dockerCompose.isRequiredBy(testAcceptanceLocal)
 
-build.dependsOn testAcceptanceLocal
+dockerCompose.isRequiredBy(integrationTests)
 
 dockerCompose {
     waitForTcpPorts = false
-    boolean keepContainers = getKeepContainers() as boolean
-    println "keep containers: ${keepContainers}"
-    stopContainers = !keepContainers
-    removeContainers = !keepContainers
+    stopContainers = true
+    removeContainers = true
     captureContainersOutput = true
-}
-
-def getKeepContainers() {
-    project.hasProperty("keepContainers") ? project.property('keepContainers') : false
 }

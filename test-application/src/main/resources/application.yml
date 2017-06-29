@@ -1,12 +1,3 @@
-spring:
-  rabbitmq:
-      addresses: localhost:19983
-      username: rabbit
-      password: 12345
-      virtual-host: /
-  profiles:
-    active: true
-
 server:
   port: 19980
 
@@ -14,7 +5,8 @@ phorest:
   events:
     configuration:
       rabbit:
-        retry:
-          maxRetryAttempts: 2
-          minDelay: 1
-          maxDelay: 1
+        enabled: true
+        addresses: localhost:32787
+        username: rabbit
+        password: 12345
+        virtualHost: /

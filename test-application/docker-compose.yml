@@ -1,4 +1,4 @@
-version: '2'
+version: '2.1'
 services:
     rabbit:
       image: 613227801076.dkr.ecr.eu-west-1.amazonaws.com/rabbitmq-server:latest
@@ -8,15 +8,5 @@ services:
         - "RABBITMQ_DEFAULT_PASS=12345"
         - "RABBITMQ_DEFAULT_VIRTUAL_HOST=/"
       ports:
-        - "19982:15672"
-        - "19983:5672"
-    testapp:
-      build:
-        context: .
-      ports:
-        - "19980"
-      depends_on:
-        - rabbit
-      environment:
-        - "SPRING_PROFILES_ACTIVE=amqp"
-        - "SPRING_RABBITMQ_ADDRESSES=rabbit:5672"
+        - "15672"
+        - "5672"
