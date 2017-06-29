@@ -8,6 +8,7 @@ buildscript {
         cglibVersion = '3.2.2'
         jacksonVersion = '2.7.4'
         jacocoVersion = '0.7.6.201602180812'
+        javaxValidationVersion = '1.1.0.Final'
         jodaVersion = '2.9.3'
         metricsVersion = '1.0.0'
         slf4jVersion = '1.7.12'

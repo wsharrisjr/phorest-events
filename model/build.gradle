@@ -4,6 +4,7 @@ plugins {
 
 dependencies {
   compile group: 'joda-time', name: 'joda-time', version: jodaVersion
+  compile group: 'javax.validation', name: 'validation-api', version: javaxValidationVersion
   provided group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: jacksonVersion
   testCompile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: jacksonVersion
 }
