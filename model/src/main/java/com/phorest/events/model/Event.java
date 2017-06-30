@@ -18,13 +18,29 @@ public class Event<T> {
     private String eventId;
     @NotNull
     private DateTime timestamp;
+    @Deprecated
     private String type;
+
+    /**
+     * Use {@link #payload} instead of it
+     */
     @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
     @Valid
-    @NotNull
+    @Deprecated
     private T data;
+    @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@type", visible = true)
+    @Valid
+    private T payload;
 
+    /**
+     * Use {@link #create} instead of it
+     */
+    @Deprecated
     public static <T extends EventData> Event<T> createNew(String type, T data) {
-        return new Event<>(UUID.randomUUID().toString(), DateTime.now(), type, data);
+        return new Event<>(UUID.randomUUID().toString(), DateTime.now(), type, data, null);
+    }
+
+    public static <T> Event<T> create(T payload) {
+        return new Event<>(UUID.randomUUID().toString(), DateTime.now(), null, null, payload);
     }
 }
