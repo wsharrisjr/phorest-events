@@ -7,7 +7,6 @@ import org.springframework.amqp.rabbit.config.RetryInterceptorBuilder;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.listener.RabbitListenerEndpointRegistrar;
-import org.springframework.amqp.rabbit.retry.RejectAndDontRequeueRecoverer;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -63,8 +62,4 @@ public class RabbitListenerConfiguration implements RabbitListenerConfigurer {
                 .build();
     }
 
-    @Bean
-    RejectAndDontRequeueRecoverer rejectAndDontRequeueRecoverer() {
-        return new RejectAndDontRequeueRecoverer();
-    }
 }

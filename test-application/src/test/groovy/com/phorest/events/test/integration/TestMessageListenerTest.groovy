@@ -22,6 +22,9 @@ import static com.phorest.events.testapp.TestRabbitConfiguration.TEST_DLQ
 import static com.phorest.events.testapp.TestRabbitConfiguration.TEST_EXCHANGE
 import static com.phorest.events.testapp.TestRabbitConfiguration.TEST_QUEUE
 import static com.phorest.events.testapp.TestRabbitConfiguration.TEST_ROUTING_KEY
+import static org.springframework.amqp.rabbit.retry.RepublishMessageRecoverer.X_EXCEPTION_MESSAGE
+import static org.springframework.amqp.rabbit.retry.RepublishMessageRecoverer.X_ORIGINAL_EXCHANGE
+import static org.springframework.amqp.rabbit.retry.RepublishMessageRecoverer.X_ORIGINAL_ROUTING_KEY
 
 @ContextConfiguration(classes = Application)
 @SpringBootTest
@@ -83,6 +86,8 @@ class TestMessageListenerTest extends Specification {
 
         def headers = deadLetteredMessage.getMessageProperties().getHeaders()
         !headers[DelayedRetryMessageRecoverer.X_RETRY_COUNT]
+        headers[X_ORIGINAL_ROUTING_KEY] == "test"
+        headers[X_ORIGINAL_EXCHANGE] == "test"
     }
 
     def 'it should retry processing message when retryable exception occurs and then send to error queue once retries are exhausted'() {
@@ -104,6 +109,9 @@ class TestMessageListenerTest extends Specification {
 
         def headers = deadLetteredMessage.getMessageProperties().getHeaders()
         headers[DelayedRetryMessageRecoverer.X_RETRY_COUNT] == 3
+        ((String) (headers[X_EXCEPTION_MESSAGE])) == 'Invalid message text: some message'
+        headers[X_ORIGINAL_ROUTING_KEY] == "test"
+        headers[X_ORIGINAL_EXCHANGE] == "test"
     }
 
     def 'it should send message immediately to error queue when non retryable exception occurs'() {
@@ -124,5 +132,8 @@ class TestMessageListenerTest extends Specification {
 
         def headers = deadLetteredMessage.getMessageProperties().getHeaders()
         !headers[DelayedRetryMessageRecoverer.X_RETRY_COUNT]
+        ((String) (headers[X_EXCEPTION_MESSAGE])) == 'Non retryable error'
+        headers[X_ORIGINAL_ROUTING_KEY] == "test"
+        headers[X_ORIGINAL_EXCHANGE] == "test"
     }
 }

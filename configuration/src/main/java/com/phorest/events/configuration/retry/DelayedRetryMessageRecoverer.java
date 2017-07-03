@@ -3,15 +3,16 @@ package com.phorest.events.configuration.retry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.retry.MessageRecoverer;
-import org.springframework.amqp.rabbit.retry.RejectAndDontRequeueRecoverer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
 import java.util.Map;
 
 @Profile("amqp")
@@ -29,7 +30,10 @@ public class DelayedRetryMessageRecoverer implements MessageRecoverer {
     private RetryDelayCalculator retryDelayCalculator;
 
     @Autowired
-    private RejectAndDontRequeueRecoverer rejectAndDontRequeueRecoverer;
+    private List<Queue> queues;
+
+    @Autowired(required = false)
+    private DeadLetterPublishingMessageRecoverer deadLetterPublishingMessageRecoverer;
 
     @Autowired(required = false)
     private RetryDecider retryDecider;
@@ -37,10 +41,15 @@ public class DelayedRetryMessageRecoverer implements MessageRecoverer {
     @Value("${phorest.events.configuration.rabbit.retry.maxRetryAttempts:10}")
     private int maxRetryAttempts;
 
+
     @PostConstruct
     public void init() {
         if (retryDecider == null) {
             retryDecider = new RetryDecider();
+        }
+
+        if (deadLetterPublishingMessageRecoverer == null) {
+            deadLetterPublishingMessageRecoverer = new DeadLetterPublishingMessageRecoverer(rabbitTemplate, queues);
         }
     }
 
@@ -51,7 +60,7 @@ public class DelayedRetryMessageRecoverer implements MessageRecoverer {
         int retryCount = (int) headers.getOrDefault(X_RETRY_COUNT, 0);
 
         if (shouldRetry(retryCount, cause)) {
-            log.warn("Retrying to deliver for routing key {}. Attempts: {}, reason: {}", originalRoutingKey, retryCount, cause.getMessage());
+            log.warn("Retrying to deliver for routing key {}. Attempts: {}, reason: {}", originalRoutingKey, retryCount, getCauseMessage(cause));
             headers.put(X_RETRY_COUNT, ++retryCount);
             message.getMessageProperties().setDelay((int) retryDelayCalculator.getDelayValue(retryCount));
             rabbitTemplate.send(message.getMessageProperties().getReceivedExchange(), originalRoutingKey, message);
@@ -69,8 +78,12 @@ public class DelayedRetryMessageRecoverer implements MessageRecoverer {
         return retryCount < maxRetryAttempts;
     }
 
+    private String getCauseMessage(Throwable cause) {
+        return cause.getCause() != null ? cause.getCause().getMessage() : cause.getMessage();
+    }
+
     private void rejectMessage(Message message, Throwable cause) {
-        rejectAndDontRequeueRecoverer.recover(message, cause);
+        deadLetterPublishingMessageRecoverer.recover(message, cause);
     }
 
 }
